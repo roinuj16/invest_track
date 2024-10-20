@@ -1,4 +1,4 @@
 src/__pycache__
-statements/*
+statements/btg/*
 venv/*
 .DS_Store
