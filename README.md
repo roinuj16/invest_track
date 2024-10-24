@@ -15,7 +15,8 @@ O principal objetivo do Invest Track é fornecer uma maneira simples e eficaz de
 - Python
 - Pandas
 - Pdfplumber
-
+- Streamlit
+- Plotly
 
 ## Instalação e uso
 
