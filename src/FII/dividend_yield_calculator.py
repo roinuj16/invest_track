@@ -1,10 +1,10 @@
 import pandas as pd
+import os
 
 from src.FII.dividend_yield_base import DividendYieldBase
 
 # @TODO: Melhorar as constants pra não deixar classe engessada
 class DividendYieldCalculator(DividendYieldBase):
-    ACTIVE_FIIS = ['RZTR11', 'PORD11','MXRF11','NCHB11','CPTI11','RECR11','HGLG11','BTCI11','CPTS11','BTLG11']
     COLUMNS_LABELS = ['Data', 'Descricao', 'Valor']
     MONTH_PT_BR = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 
                    'Outubro', 'Novembro', 'Dezembro']
@@ -27,7 +27,16 @@ class DividendYieldCalculator(DividendYieldBase):
         result['Mes'] = result['Data'].dt.month.apply(lambda x: self.MONTH_PT_BR[x - 1])
 
         return result[['Mes', 'Valor']]
+    
+    def calc_dy_from_pm_relative(self):
+        base_dir = os.path.dirname(__file__) 
+        file_path = os.path.join(base_dir, '..', '..', 'data', 'fundos_imobiliarios.csv')
         
+        data = pd.read_csv(file_path)
+        data['DY'] = ((data['DY'] / data['Quantidade']) / data['PM']) * 100
+        data['DY'] = round(data['DY'], 2)
+
+        return data[['Ativo', 'DY']]
 
     def __prepare_dy_list(self, data: list):
         df_data = pd.DataFrame(data, columns=self.COLUMNS_LABELS)

@@ -3,8 +3,6 @@ import re
 import os
 
 class PdfExtractProcessor:
-    ACTIVE_FIIS = ['RZTR11', 'PORD11','MXRF11','NCHB11','CPTI11','RECR11','HGLG11','BTCI11','CPTS11','BTLG11']
-    COLUMNS_LABELS = ['Data', 'Descricao', 'Valor']
     FILE_PATH = 'statements/btg'
 
     def read_pdf_file(self) -> list:

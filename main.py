@@ -1,41 +1,27 @@
-import os
-import pandas as pd
 import streamlit as st
 import warnings
 warnings.filterwarnings('ignore') #Ignorar alertas
-import plotly.express as px
+from PIL import Image
 
-from src.FII.pdf_extract_processor import PdfExtractProcessor
-from src.FII.dividend_yield_calculator import DividendYieldCalculator
+from src.Views import dashboard_fii
 
 def main() -> None:
-    pdf_processor = PdfExtractProcessor()
-    list_pdf_data = pdf_processor.read_pdf_file()
-
-    dy_calculator = DividendYieldCalculator(list_pdf_data)
-    dy_month = dy_calculator.calc_dy_by_month()
-
-    
-    __create_view(dy_month)
-
-def __create_view(data: pd.DataFrame) -> None:
     st.set_page_config(layout='wide')
+    logo = Image.open('assets/logo.jpg')
+    st.sidebar.image(logo, use_column_width=True)
+    st.sidebar.title("Invest Track")
+
     
-    month = st.sidebar.selectbox('Selecione o mês', ['All'] + list(data['Mes'].unique()))
+    # @TODO: Criar a lógica para trocar de dashboard. Ideia para lógica abaixo.
+    # Criar no sidebar um componente para poder selecionar o Dashboard.
+    # option = st.sidebar.selectbox("Selecione a página", ["Dashboard FII", "Dashboard Ações"])
 
-    if month != 'All':
-        data_filtered = data[data['Mes'] == month]
-    else:
-        data_filtered = data
+    # if option == "Dashboard FII":
+    #     dashboard_fii.display()
+    # elif option == "Dashboard Ações":
+    #     dashboard_stock.display()
 
-    col1, col2,  = st.columns([1, 2])
-
-    with col1:
-        st.write("**Tabela de Valores por Mês**") 
-        st.dataframe(data_filtered)
-
-    fig_date = px.bar(data_filtered, x='Mes', y='Valor', title='DY recebido por mês')
-    col2.plotly_chart(fig_date)
+    dashboard_fii.display()
 
 if __name__ == "__main__":
     main()
